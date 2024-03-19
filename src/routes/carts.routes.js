@@ -1,12 +1,12 @@
 const { Router } = require('express');
 const fs = require('fs').promises;
-const ProductManager = require('../productManager');
+const ProductManager = require('../dao/productManager');
 const listaDeProductos = new ProductManager('./src/carrito.json');
 
 const router = Router();
 
-// GET / http://localhost:8080/api/carts?limit=3
-router.get(`/`, async (req, res) => {
+// GET / http://localhost:8080/api/carts/v1?limit=3
+router.get(`/v1`, async (req, res) => {
     try {
         const { limit } = req.query;
         const limitNumber = limit ? parseInt(limit, 10) : undefined;
@@ -30,8 +30,8 @@ router.get(`/`, async (req, res) => {
     }
 });
 
-// GET / http://localhost:8080/api/carts/4
-router.get(`/:cid`, async (req, res) => {
+// GET / http://localhost:8080/api/carts/v1/4 ======== OK
+router.get(`/v1/:cid`, async (req, res) => {
     try {
         const { cid } = req.params;
         const cartId = cid ? parseInt(cid, 10) : undefined;
@@ -55,8 +55,8 @@ router.get(`/:cid`, async (req, res) => {
     }
 });
 
-// POST http://localhost:8080/api/carts
-router.post(`/`, async (req, res) => {
+// POST http://localhost:8080/api/carts/v1
+router.post(`/v1`, async (req, res) => {
     const result = await listaDeProductos.addCart();
     if (result === -1) {
         res.json({
@@ -73,8 +73,8 @@ router.post(`/`, async (req, res) => {
     }
 });
 
-// POST http://localhost:8080/api/carts/:cid/product/:pid
-router.post(`/:cid/product/:pid`, async (req, res) => {
+// POST http://localhost:8080/api/carts/v1/:cid/product/:pid
+router.post(`/v1/:cid/product/:pid`, async (req, res) => {
     try {
         const { cid, pid } = req.params;
         const product = req.body;
